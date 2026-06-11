@@ -7,5 +7,7 @@ public enum BackupType
     ImageFull = 3,
     ImageIncremental = 4,
     ManualDiskClone = 5,
-    ManualOther = 6
+    ManualOther = 6,
+    UrBackupFile = 7,
+    UrBackupImage = 8
 }

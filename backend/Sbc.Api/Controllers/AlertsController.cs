@@ -272,4 +272,90 @@ public class AlertsController : ControllerBase
 
         return 1;
     }
+
+    [HttpGet("open")]
+    public async Task<IActionResult> GetOpenAlerts(CancellationToken cancellationToken)
+    {
+        var alerts = await _dbContext.Alerts
+            .AsNoTracking()
+            .Include(x => x.ProtectedSystem)
+                .ThenInclude(x => x!.Simulator)
+            .Where(x => x.Status == Sbc.Domain.Enums.AlertStatus.Open)
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Select(x => new
+            {
+                x.Id,
+                x.Code,
+                x.Title,
+                x.Message,
+                x.Severity,
+                x.Status,
+                x.CreatedAtUtc,
+                x.ResolvedAtUtc,
+                ProtectedSystem = x.ProtectedSystem == null
+                    ? null
+                    : new
+                    {
+                        x.ProtectedSystem.Id,
+                        x.ProtectedSystem.Hostname,
+                        x.ProtectedSystem.IpAddress,
+                        x.ProtectedSystem.OperatingSystem,
+                        x.ProtectedSystem.IsOnline,
+                        x.ProtectedSystem.IsRemovedFromUrBackup,
+                        Simulator = x.ProtectedSystem.Simulator == null
+                            ? null
+                            : new
+                            {
+                                x.ProtectedSystem.Simulator.Id,
+                                x.ProtectedSystem.Simulator.Code,
+                                x.ProtectedSystem.Simulator.Name
+                            }
+                    }
+            })
+            .ToListAsync(cancellationToken);
+
+        return Ok(alerts);
+    }
+    [HttpPost("{id:guid}/resolve")]
+    public async Task<IActionResult> ResolveAlert(
+    Guid id,
+    CancellationToken cancellationToken)
+    {
+        var alert = await _dbContext.Alerts
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (alert is null)
+        {
+            return NotFound(new
+            {
+                Message = "Alert not found."
+            });
+        }
+
+        if (alert.Status == Sbc.Domain.Enums.AlertStatus.Resolved)
+        {
+            return Ok(new
+            {
+                Message = "Alert is already resolved.",
+                alert.Id,
+                alert.Code,
+                alert.Status,
+                alert.ResolvedAtUtc
+            });
+        }
+
+        alert.Status = Sbc.Domain.Enums.AlertStatus.Resolved;
+        alert.ResolvedAtUtc = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return Ok(new
+        {
+            Message = "Alert resolved successfully.",
+            alert.Id,
+            alert.Code,
+            alert.Status,
+            alert.ResolvedAtUtc
+        });
+    }
 }

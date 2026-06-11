@@ -13,4 +13,8 @@ public sealed class UrBackupOptions
     public int TimeoutSeconds { get; set; } = 10;
 
     public int HealthCheckIntervalSeconds { get; set; } = 60;
+
+    public bool EnableClientSyncWorker { get; set; } = true;
+
+    public int ClientSyncIntervalSeconds { get; set; } = 300;
 }

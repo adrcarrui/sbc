@@ -127,7 +127,11 @@ public class SbcDbContext : DbContext
 
             entity.HasIndex(x => x.IsOnline);
 
+            entity.HasIndex(x => x.IsRemovedFromUrBackup);
+
             entity.HasIndex(x => x.LastSeenAtUtc);
+
+            entity.HasIndex(x => x.LastUrBackupSyncAtUtc);
 
             entity.HasOne(x => x.Simulator)
                 .WithMany(x => x.Systems)

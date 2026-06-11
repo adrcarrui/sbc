@@ -357,6 +357,10 @@ namespace Sbc.Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_online");
 
+                    b.Property<bool>("IsRemovedFromUrBackup")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_removed_from_ur_backup");
+
                     b.Property<DateTime?>("LastFileBackupAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_file_backup_at_utc");
@@ -381,6 +385,10 @@ namespace Sbc.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_seen_at_utc");
 
+                    b.Property<DateTime?>("LastUrBackupSyncAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_ur_backup_sync_at_utc");
+
                     b.Property<bool>("LiveBackupValidated")
                         .HasColumnType("boolean")
                         .HasColumnName("live_backup_validated");
@@ -398,6 +406,10 @@ namespace Sbc.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("partition_scheme");
+
+                    b.Property<DateTime?>("RemovedFromUrBackupAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("removed_from_ur_backup_at_utc");
 
                     b.Property<Guid?>("SimulatorId")
                         .HasColumnType("uuid")
@@ -435,8 +447,14 @@ namespace Sbc.Infrastructure.Persistence.Migrations
                     b.HasIndex("IsOnline")
                         .HasDatabaseName("ix_protected_systems_is_online");
 
+                    b.HasIndex("IsRemovedFromUrBackup")
+                        .HasDatabaseName("ix_protected_systems_is_removed_from_ur_backup");
+
                     b.HasIndex("LastSeenAtUtc")
                         .HasDatabaseName("ix_protected_systems_last_seen_at_utc");
+
+                    b.HasIndex("LastUrBackupSyncAtUtc")
+                        .HasDatabaseName("ix_protected_systems_last_ur_backup_sync_at_utc");
 
                     b.HasIndex("SimulatorId")
                         .HasDatabaseName("ix_protected_systems_simulator_id");

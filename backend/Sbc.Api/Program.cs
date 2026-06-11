@@ -40,7 +40,10 @@ builder.Services.AddHttpClient<IUrBackupClient, UrBackupClient>((serviceProvider
     client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
 });
 
+builder.Services.AddScoped<IUrBackupClientSyncService, UrBackupClientSyncService>();
+
 builder.Services.AddHostedService<UrBackupHealthWorker>();
+builder.Services.AddHostedService<UrBackupClientSyncWorker>();
 
 builder.Services.AddOpenApi();
 

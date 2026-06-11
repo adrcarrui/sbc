@@ -60,4 +60,10 @@ public class ProtectedSystem : AuditableEntity
     public int? LastFileBackupIssues { get; set; }
 
     public int? UrBackupStatusCode { get; set; }
+
+    public DateTime? LastUrBackupSyncAtUtc { get; set; }
+
+    public bool IsRemovedFromUrBackup { get; set; }
+
+    public DateTime? RemovedFromUrBackupAtUtc { get; set; }
 }
