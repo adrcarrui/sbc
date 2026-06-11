@@ -1,0 +1,6 @@
+@Sbc.Api_HostAddress = http://localhost:5169
+
+GET {{Sbc.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
