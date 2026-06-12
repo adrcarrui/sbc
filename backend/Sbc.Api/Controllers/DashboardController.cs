@@ -325,6 +325,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("recent-backup-events")]
+    [HttpGet("recent-events")]
     public async Task<IActionResult> GetRecentBackupEvents(
     [FromQuery] int take,
     CancellationToken cancellationToken)
@@ -546,4 +547,5 @@ public class DashboardController : ControllerBase
             };
         }
     }
+    
 }
